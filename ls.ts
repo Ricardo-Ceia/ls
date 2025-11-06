@@ -3,7 +3,7 @@ import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import * as utils from './utils.ts'
 
-const currentDir = './';
+const currentDir = '.';
 const ls_version = '1.0.0.0';
 
 const args = utils.get_arguments_from_cmd();
@@ -39,12 +39,15 @@ fs.readdir(folder, (err: NodeJS.ErrnoException | null, files: string[]) => {
     });
     process.stdout.write("\n")
   }
+
   else if(args.l){
     files.forEach((file:string) => {
+      if (file.startsWith('.')) return;
       const stats = fs.statSync(file)
-      process.stdout.write(`${stats.mode}  ${stats.nlink} ${stats.uid} ${stats.gid} ${utils.convertMs_to_Time(stats.mtimeMs)}\n`)
+      process.stdout.write(`${utils.modeToPermissions(stats.mode)}  ${stats.nlink} ${stats.uid} ${stats.gid} ${utils.convertMs_to_Time(stats.mtimeMs)} ${file}\n`)
     })
   }
+
   else{
     files.forEach((file: string) => {
         process.stdout.write(file+" ");

@@ -62,3 +62,33 @@ export function convertMs_to_Time(time_in_ms:float): string{
   return `${month}  ${day} ${hours}:${minutes}` 
 }
 
+export function modeToPermissions(mode: number): string{
+  let prefix:string;
+
+  if ((mode & 0o40000) === 0o40000){
+    prefix = 'd';
+  }
+  else if((mode & 0o1000000) === 0o1000000){
+    prefix = 'f';
+  }
+  else{
+    prefix = '-';
+  }
+
+  const symbols = ['r','w','x'];
+
+  let perms='';
+  
+  //extract the lower 9 bits
+  const permissions = mode & 0o777;
+
+   for (let i = 2; i >= 0; i--) {
+    const shift = i * 3;
+    const part = (permissions >> shift) & 0o7; // isolate 3 bits per group
+    for (let bit = 2; bit >= 0; bit--) {
+      perms += (part & (1 << bit)) ? symbols[2 - bit] : '-';
+    }
+  }
+  return prefix+perms;
+}
+
