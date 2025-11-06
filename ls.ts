@@ -27,12 +27,12 @@ if (args._[0]) {
 }
 
 if (args.v) {
-  console.log(`ls version ${ls_version}`);
+  process.stdout.write(`ls version ${ls_version}\n`);
   process.exit(0);
 }
 
 if (args.d) {
-  console.log(folder);
+  process.stdout.write(folder+"\n");
   process.exit(0);
 }
 
@@ -52,7 +52,7 @@ fs.readdir(folder, (err: NodeJS.ErrnoException | null, files: string[]) => {
   else if(args.l){
     files.forEach((file:string) => {
       const stats = fs.statSync(file)
-      console.log(`${stats.mode}  ${stats.nlink} ${stats.uid} ${stats.gid} ${convertMs_to_Time(stats.mtimeMs)}`)
+      process.stdout.write(`${stats.mode}  ${stats.nlink} ${stats.uid} ${stats.gid} ${convertMs_to_Time(stats.mtimeMs)}\n`)
     })
   }
   else{
