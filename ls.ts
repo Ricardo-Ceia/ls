@@ -45,8 +45,9 @@ fs.readdir(folder, (err: NodeJS.ErrnoException | null, files: string[]) => {
   if (!args.a && !args.l) {
     files.forEach((file: string) => {
       if (file.startsWith('.')) return;
-      console.log(file)
+      process.stdout.write(file+" ");
     });
+    process.stdout.write("\n")
   }
   else if(args.l){
     files.forEach((file:string) => {
