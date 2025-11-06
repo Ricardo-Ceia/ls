@@ -5,7 +5,7 @@ import { hideBin } from 'yargs/helpers';
 interface Arguments {
   _: string[];
   a: boolean; // represents the -a flag (do not ignore entries starting with .)
-  c: boolean; // list entries by columns
+  l:boolean; //use long listing format
   d: boolean; // list the directories themselves, not their contents
   v: boolean; // list the version of the command
 }
@@ -42,21 +42,22 @@ fs.readdir(folder, (err: NodeJS.ErrnoException | null, files: string[]) => {
     return;
   }
 
-  if (!args.a && !args.c) {
+  if (!args.a && !args.l) {
     files.forEach((file: string) => {
       if (file.startsWith('.')) return;
       console.log(file)
     });
   }
-
-  else if (args.a) {
-    files.forEach((file: string) => {
-      console.log(file);
-    });
+  else if(args.l){
+    files.forEach((file:string) => {
+      const stats = fs.statSync(file)
+      console.log(`${stats.mode}  ${stats.nlink} ${stats.uid} ${stats.gid} ${convertMs_to_Time(stats.mtimeMs)}`)
+    })
   }
-  
-  else if (args.c) {
-    console.log('List entries by columns (not yet implemented)');
+  else{
+    files.forEach((file: string) => {
+        console.log(file);
+     });
   }
 });
 
@@ -68,8 +69,8 @@ function get_arguments_from_cmd(): Arguments {
       description: 'Represents the -a flag (do not ignore entries starting with .)',
       default: false,
     })
-    .option('columns', {
-      alias: 'c',
+    .option('long', {
+      alias: 'l',
       type: 'boolean',
       description: 'List entries by columns',
       default: false,
@@ -97,9 +98,19 @@ function get_arguments_from_cmd(): Arguments {
    return {
     _: argv._.map(String),
     a: argv.a,
-    c: argv.c,
-    d: argv.d, // ✅ fixed typo (was argd.d)
+    l: argv.l,
+    d: argv.d, 
     v: argv.v,
   }
+}
+
+function convertMs_to_Time(time_in_ms:float): string{
+  let date = new Date(time_in_ms);
+  const month = date.getMonth();
+  const day = date.getDay();
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+
+  return `${month}  ${day} ${hours}:${minutes}` 
 }
 
