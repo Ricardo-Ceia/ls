@@ -18,17 +18,14 @@ let results: string[] = [];
 
 const args = get_arguments_from_cmd();
 
-// ✅ folder can be reassigned, so use let
 let folder: string;
 
-// ✅ args._ starts at index 0, not 1
 if (args._[0]) {
   folder = args._[0];
 } else {
   folder = currentDir;
 }
 
-// ✅ handle version and -d flags early
 if (args.v) {
   console.log(`ls version ${ls_version}`);
   process.exit(0);
@@ -45,21 +42,19 @@ fs.readdir(folder, (err: NodeJS.ErrnoException | null, files: string[]) => {
     return;
   }
 
-  // Default behavior (no flags)
   if (!args.a && !args.c) {
     files.forEach((file: string) => {
       if (file.startsWith('.')) return;
-      results.push(file);
+      console.log(file)
     });
-    console.log(results.join('  '));
   }
-  // -a flag: include hidden files
+
   else if (args.a) {
     files.forEach((file: string) => {
       console.log(file);
     });
   }
-  // -c flag placeholder
+  
   else if (args.c) {
     console.log('List entries by columns (not yet implemented)');
   }
@@ -98,6 +93,7 @@ function get_arguments_from_cmd(): Arguments {
       d: boolean;
       v: boolean;
     };
+
    return {
     _: argv._.map(String),
     a: argv.a,
