@@ -1,5 +1,6 @@
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
+import userid from 'userid'
 
 interface Arguments {
   _: string[];
@@ -90,5 +91,13 @@ export function modeToPermissions(mode: number): string{
     }
   }
   return prefix+perms;
+}
+
+
+export function convert_id_into_name(uid:number,gid:number): {username:string,groupname:string}{
+  return {
+    username:userid.username(uid),
+    groupname:userid.groupname(gid)
+  };
 }
 

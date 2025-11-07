@@ -44,7 +44,8 @@ fs.readdir(folder, (err: NodeJS.ErrnoException | null, files: string[]) => {
     files.forEach((file:string) => {
       if (file.startsWith('.')) return;
       const stats = fs.statSync(file)
-      process.stdout.write(`${utils.modeToPermissions(stats.mode)}  ${stats.nlink} ${stats.uid} ${stats.gid} ${utils.convertMs_to_Time(stats.mtimeMs)} ${file}\n`)
+      const {username,groupname} = utils.convert_id_into_name(stats.uid,stats.gid)
+      process.stdout.write(`${utils.modeToPermissions(stats.mode)}  ${stats.nlink} ${username} ${groupname} ${utils.convertMs_to_Time(stats.mtimeMs)} ${file}\n`)
     })
   }
 
