@@ -2,9 +2,8 @@ import * as fs from 'fs';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import * as utils from './utils.ts'
+import {LS_VERSION,CURRENT_DIR,HELP_CMD_STRING} from './config.ts'
 
-const currentDir = '.';
-const ls_version = '1.0.0.0';
 
 const args = utils.get_arguments_from_cmd();
 
@@ -13,16 +12,21 @@ let folder: string;
 if (args._[0]) {
   folder = args._[0];
 } else {
-  folder = currentDir;
+  folder = CURRENT_DIR;
 }
 
 if (args.v) {
-  process.stdout.write(`ls version ${ls_version}\n`);
+  process.stdout.write(`ls version ${LS_VERSION}\n`);
   process.exit(0);
 }
 
 if (args.d) {
   process.stdout.write(folder+"\n");
+  process.exit(0);
+}
+
+if (args.h){
+  process.stdout.write(HELP_CMD_STRING+"\n");
   process.exit(0);
 }
 

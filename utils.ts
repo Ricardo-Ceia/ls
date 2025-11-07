@@ -8,10 +8,13 @@ interface Arguments {
   l:boolean; //use long listing format
   d: boolean; // list the directories themselves, not their contents
   v: boolean; // list the version of the command
+  h: boolean; //display this help and exit
 }
 
 export function get_arguments_from_cmd(): Arguments {
   const argv = yargs(hideBin(process.argv))
+    .help(false)
+    .version(false)
     .option('all', {
       alias: 'a',
       type: 'boolean',
@@ -36,12 +39,19 @@ export function get_arguments_from_cmd(): Arguments {
       description: 'List the version of ls',
       default: false,
     })
+    .option('help',{
+      alias: 'h',
+      type: 'boolean',
+      description: 'display this help and exit',
+      default: false,
+    })
     .parseSync() as unknown as {
       _: (string | number)[];
       a: boolean;
       c: boolean;
       d: boolean;
       v: boolean;
+      h: boolean,
     };
 
    return {
@@ -50,6 +60,7 @@ export function get_arguments_from_cmd(): Arguments {
     l: argv.l,
     d: argv.d, 
     v: argv.v,
+    h: argv.h,
   }
 }
 
