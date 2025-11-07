@@ -53,6 +53,7 @@ fs.readdir(folder, (err: NodeJS.ErrnoException | null, files: string[]) => {
     files.forEach((file: string) => {
         process.stdout.write(file+" ");
      });
+    process.stdout.write("\n")
   }
 });
 
